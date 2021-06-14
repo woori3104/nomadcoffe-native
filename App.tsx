@@ -3,7 +3,7 @@ import { Ionicons } from "@expo/vector-icons";
 import * as Font from "expo-font";
 import { StyleSheet, Text, View } from "react-native";
 import { Asset } from "expo-asset";
-import { useState } from "react";
+import React, { useState } from "react";
 
 
 export default function App() {
@@ -27,13 +27,9 @@ export default function App() {
       />
     );
   }
+  return (
+    <View></View>
+  );
+  
+  
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
