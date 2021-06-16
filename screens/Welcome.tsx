@@ -14,7 +14,9 @@ const Container = styled.View`
 
 const Logo = styled.Image`
   max-width: 50%;
+  width: 100%;
   height: 100px;
+  margin-bottom: 20px;
 `;
 
 const CreateAccount = styled.TouchableOpacity`
@@ -41,14 +43,14 @@ export default function Welcome({ navigation }: Props<"Welcome">) {
     const goToCreateAccount = () => navigation.navigate("CreateAccount");
     const goToLogIn = () => navigation.navigate("LogIn");
     return (
-        <Container>
-            <Logo resizeMode="cover" source={require("../assets/logo.png")} />
-                <CreateAccount  disabled={ false } onPress={goToCreateAccount}>
-                    <CreateAccountText>Create Account</CreateAccountText>
-                </CreateAccount>
-            <TouchableOpacity onPress={goToLogIn}>
-                <LoginLink>Log In</LoginLink>
-            </TouchableOpacity>
-        </Container>
+      <Container>
+        <Logo resizeMode="cover" source={require("../assets/logo.png")} />
+          <CreateAccount  disabled={ false } onPress={goToCreateAccount}>
+            <CreateAccountText>Create Account</CreateAccountText>
+          </CreateAccount>
+        <TouchableOpacity onPress={goToLogIn}>
+          <LoginLink>Log In</LoginLink>
+        </TouchableOpacity>
+      </Container>
     );
 }
