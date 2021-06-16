@@ -1,4 +1,5 @@
 import React from "react";
+import { Keyboard, KeyboardAvoidingView, Platform, TouchableWithoutFeedback } from "react-native";
 import styled from "styled-components/native";
 
 const Container = styled.View`
@@ -16,11 +17,31 @@ const Logo = styled.Image`
   margin-bottom: 20px;
 `;
 
-export default function AuthLayout({ children }: {children:any}) {
+export default function AuthLayout({ children }: { children: React.ReactNode }) {
+  const dismissKeyboard = () => {
+    Keyboard.dismiss();
+  };
   return (
-    <Container>
-      <Logo resizeMode="contain" source={require("../../assets/logo.png")} />
-      {children}
-    </Container>
+    <TouchableWithoutFeedback
+      style={{ flex: 1 }}
+      onPress={dismissKeyboard}
+      disabled={Platform.OS === "web"}
+    >
+      <Container>
+        <KeyboardAvoidingView
+          style={{
+            width: "100%",
+          }}
+          behavior="position"
+          keyboardVerticalOffset={Platform.OS === "ios" ? 50 : 0}
+        >
+          <Logo
+            resizeMode="contain"
+            source={require("../../assets/logo.png")}
+          />
+          {children}
+        </KeyboardAvoidingView>
+      </Container>
+    </TouchableWithoutFeedback>
   );
 }
