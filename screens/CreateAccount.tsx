@@ -36,9 +36,6 @@ export default function CreateAccount({ navigation }: Props<"CreateAccount">) {
   const location = useRef(null);
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
-  const onValid = (data:any) => {
-    console.log(data);
-  };
 
   useEffect(() => {
     register("userName", { required: true });
@@ -95,6 +92,7 @@ export default function CreateAccount({ navigation }: Props<"CreateAccount">) {
         secureTextEntry
         returnKeyType="done"
         style={{ backgroundColor: "white", width: "100%" }}
+        onSubmitEditing={() => onNext(nameRef)}
         onChangeText={(text) => setValue("password", text)}
       />
       <TextInput
@@ -130,7 +128,7 @@ export default function CreateAccount({ navigation }: Props<"CreateAccount">) {
         text="Create Account"
         loading={loading}
         disabled={!watch("username") || !watch("password")}
-        onPress={handleSubmit(onValid)}
+        onPress={handleSubmit(onSubmitValid)}
       />
     </AuthLayout>
   );
