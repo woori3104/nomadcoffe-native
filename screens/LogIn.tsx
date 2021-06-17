@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { Props } from "../types";
 import AuthLayout from "../components/auth/AuthLayout";
 import { TextInput } from "../components/auth/AuthShared";
@@ -25,10 +25,11 @@ export default function LogIn({ route: { params } }: Props<"LogIn">) {
     },
   });
   const passwordRef = useRef(null);
-  const onCompleted = async (data:any) => {
+  const onCompleted = async (data: any) => {
     const {
       login: { ok, token },
     } = data;
+    console.log(data);
     if (ok) {
       await logUserIn(token);
     }
@@ -40,7 +41,8 @@ export default function LogIn({ route: { params } }: Props<"LogIn">) {
   const onNext = (nextOne: React.RefObject<any>) => {
     nextOne?.current?.focus();
   };
-  const onValid = (data:any) => {
+  const onValid = (data: any) => {
+    console.log(data);
     if (!loading) {
       logInMutation({
         variables: {
@@ -49,6 +51,10 @@ export default function LogIn({ route: { params } }: Props<"LogIn">) {
       });
     }
   };
+    useEffect(() => {
+    register("userName", { required: true });
+    register("password", { required: true });
+  }, [register]);
   return (
     <AuthLayout>
       <TextInput
@@ -73,7 +79,7 @@ export default function LogIn({ route: { params } }: Props<"LogIn">) {
       />
       <AuthButton text="Log In" 
         loading={loading}
-        disabled={!watch("userName") || !watch("password")}
+        disabled={false}
         onPress={handleSubmit(onValid)} />
     </AuthLayout> 
   );
