@@ -43,6 +43,7 @@ export default function CreateAccount({ navigation }: Props<"CreateAccount">) {
     register("name", { required: true });
     register("email", { required: true });
     register("location", { required: true });
+    register("profile", { required: true });
   }, [register]);
 
   const onNext = (nextOne: React.RefObject<any>) => {
@@ -127,7 +128,7 @@ export default function CreateAccount({ navigation }: Props<"CreateAccount">) {
        <AuthButton
         text="Create Account"
         loading={loading}
-        disabled={!watch("username") || !watch("password")}
+        disabled={false}
         onPress={handleSubmit(onSubmitValid)}
       />
     </AuthLayout>
