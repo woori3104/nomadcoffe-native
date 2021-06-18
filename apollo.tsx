@@ -16,7 +16,10 @@ export const logUserIn = async (token:string) => {
   isLoggedInVar(true);
   tokenVar(token);
 };
-
+export const logUserOut = () => {
+  localStorage.removeItem(TOKEN);
+  window.location.reload();
+};
 
 const httpLinkOptions = {
   fetch,
