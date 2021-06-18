@@ -6,12 +6,15 @@ import Notifications from "../screens/Notifications";
 import Profile from "../screens/Profile";
 import { View } from "react-native";
 import TabIcon from "../components/nav/TabIcon";
+import useUser from "../hooks/useUser";
+import Avatar from "../components/auth/AuthShared";
 
 const Tabs = createBottomTabNavigator();
 
 export default function LoggedInNav() {
+  const { data } = useUser();
   return (
-      <Tabs.Navigator
+    <Tabs.Navigator
       tabBarOptions={{
         activeTintColor: "white",
         showLabel: false,
@@ -21,33 +24,36 @@ export default function LoggedInNav() {
         },
       }}
     >
-      <Tabs.Screen
-        name="SeeCoffeeShops"
-        component={SeeCoffeeShops}
-        options={{
-          tabBarIcon: ({ focused, color, size }) => (
-            <TabIcon iconName={"home"} color={color} focused={focused} />
-          ),
-        }}
+    <Tabs.Screen
+      name="SeeCoffeeShops"
+      component={SeeCoffeeShops}
+      options={{
+        tabBarIcon: ({ focused, color, size }) => (
+          <TabIcon iconName={"home"} color={color} focused={focused} />
+        ),
+      }}
+    />
+    <Tabs.Screen
+      name="Search"
+      component={Search}
+      options={{
+        tabBarIcon: ({ focused, color, size }) => (
+          <TabIcon iconName={"search"} color={color} focused={focused} />
+        ),
+      }}
       />
-      <Tabs.Screen
-        name="Search"
-        component={Search}
-        options={{
-          tabBarIcon: ({ focused, color, size }) => (
-            <TabIcon iconName={"search"} color={color} focused={focused} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="Profile"
-        component={Profile}
-        options={{
-          tabBarIcon: ({ focused, color, size }) => (
-            <TabIcon iconName={"person"} color={color} focused={focused} />
-          ),
-        }}
-      />
+     
+    <Tabs.Screen
+      name="Profile"
+      component={Profile}
+      options={{
+        tabBarIcon: ({ focused, color, size }) => (
+          data?.me?.avatar ? <Avatar url={data?.me?.avatar} />
+            :           
+          <TabIcon iconName={"person"} color={color} focused={focused} />
+        ),
+      }}
+    />
     </Tabs.Navigator>
   );
 }
