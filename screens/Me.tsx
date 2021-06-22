@@ -12,9 +12,9 @@ import styled from "styled-components/native";
 import { colors } from "../color";
 import { logUserOut } from "../apollo";
 
-const SEE_PROFILE_QUERY = gql`
-  query seeProfile($userName:String!) {
-    seeProfile(userName:$userName) {
+const Me_QUERY = gql`
+   query me {
+    me {
       userName
       email
       name
@@ -25,7 +25,7 @@ const SEE_PROFILE_QUERY = gql`
 `;
 
 export default function Profile({ navigation, route }: { navigation: any, route: any }) {
-  const { data } = useQuery(SEE_PROFILE_QUERY,  { variables: {userName:route?.params?.username}});
+  const { data } = useQuery(Me_QUERY);
 
   useEffect(() => {
     if (route?.params?.username) {
@@ -35,13 +35,14 @@ export default function Profile({ navigation, route }: { navigation: any, route:
     }
   }, []);
 
+  const goToEditProfile = () => navigation.navigate("EditProfile");
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.userInfoSection}>
         <View style={{flexDirection: 'row', marginTop: 15}}>
           <Avatar.Image 
             source={{
-              uri: data?.seeProfile?.avatarURL ?  data?.seeProfile?.avatarURL : "../assets/avatar.png" ,
+              uri: data?.me?.avatarURL ?  data?.me?.avatarURL : "../assets/avatar.png" ,
             }}
             size={150}
           />
@@ -49,8 +50,8 @@ export default function Profile({ navigation, route }: { navigation: any, route:
             <Title style={[styles.title, {
               marginTop:15,
               marginBottom: 5,
-            }]}>{data?.seeProfile?.name }</Title>
-            <Caption style={styles.caption}>@{data?.seeProfile?.userName }</Caption>
+           }]}>{data?.me?.name }</Title>
+            <Caption style={styles.caption}>@{data?.me?.userName }</Caption>
           </View>
         </View>
       </View>
@@ -58,16 +59,19 @@ export default function Profile({ navigation, route }: { navigation: any, route:
       <View style={styles.userInfoSection}>
         <View style={styles.row}>
           <Ionicons iconName="map-marker-radius" color="white" size={20}/>
-          <Text style={{color:"white", marginLeft: 20}}>Location : {data?.seeProfile?.location }</Text>
+          <Text style={{color:"white", marginLeft: 20}}>Location : {data?.me?.location }</Text>
         </View>
         <View style={styles.row}>
           <Ionicons iconName="phone" color="#white" size={20}/>
-          <Text style={{color:"white", marginLeft: 20}}>email : {data?.seeProfile?.email }</Text>
+          <Text style={{color:"white", marginLeft: 20}}>email : {data?.me?.email }</Text>
         </View>
       </View>
       <View>
         <TouchableOpacity onPress={logUserOut}>
           <LoginOut>Log Out</LoginOut>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={goToEditProfile}>
+          <LoginOut>EditProfile</LoginOut>
         </TouchableOpacity>
       </View>
     </SafeAreaView>

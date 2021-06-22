@@ -3,6 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { onError } from "@apollo/client/link/error";
 import { createUploadLink } from "apollo-upload-client";
 import { setContext } from "@apollo/client/link/context";
+import { offsetLimitPagination } from "@apollo/client/utilities";
 
 export const isLoggedInVar = makeVar(false);
 export const tokenVar = makeVar("");
@@ -23,7 +24,8 @@ export const logUserOut = () => {
 
 const httpLinkOptions = {
   fetch,
-    uri: "http://woori-nomadcoffe-backend.herokuapp.com/graphql",
+  uri://"http://localhost:4000/graphql",
+     "http://woori-nomadcoffe-backend.herokuapp.com/graphql",
 }
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors)
@@ -44,10 +46,18 @@ const authLink = setContext((_, { headers }) => {
     },
   };
 });
-
+export const cache = new InMemoryCache({
+  typePolicies: {
+    Query: {
+      fields: {
+        seeFeed: offsetLimitPagination(),
+      },
+    },
+  },
+});
 const client = new ApolloClient({
   link: from([errorLink, authLink.concat(uploadHttpLink)]),
-  cache: new InMemoryCache(),
+  cache: cache,
 });
 
 

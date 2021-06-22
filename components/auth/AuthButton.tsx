@@ -18,7 +18,7 @@ const ButtonText = styled.Text`
 `;
 
 
-export default function AuthButton({ onPress, disabled,loading, text }:{ onPress:any, disabled:boolean,loading:boolean, text:string }) {
+export default function AuthButton({ onPress, disabled, loading, text }:{ onPress:any, disabled:boolean,loading:boolean, text:string }) {
   return (
     <Button disabled={disabled} onPress={onPress}>
       {loading ? (

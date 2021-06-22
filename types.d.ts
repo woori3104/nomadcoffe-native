@@ -6,8 +6,10 @@ export type RootStackParamList = {
   Welcome: undefined;
   LogIn: { userName: string; password: string } | undefined;
   CreateAccount: { usernName: string; password: string; email: string; name: string; location: string } | undefined;
-  SeeCoffeeShops: undefined
-  Profile: undefined
+  Home: undefined
+  Profile: { userName: string; } | undefined
+  ME: undefined
+  EditProfile: undefined
 };
 
 export type Props<RouteName extends keyof RootStackParamList> = {
