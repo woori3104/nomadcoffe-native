@@ -10,10 +10,11 @@ export type RootStackParamList = {
   Profile: { userName: string; } | undefined
   ME: undefined
   EditProfile: undefined
+  SeeCoffeeShop: {id:number} | undefined
+
 };
 
 export type Props<RouteName extends keyof RootStackParamList> = {
   navigation: StackNavigationProp<RootStackParamList, RouteName>;
   route: RouteProp<RootStackParamList, RouteName>;
-  
 };

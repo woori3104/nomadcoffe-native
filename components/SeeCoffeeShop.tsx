@@ -60,11 +60,10 @@ function SeeCoffeeShop({ id, name, photos, categories, user }: { id:number, name
     <Container>
       <Header onPress={goToProfile}>
         <UserAvatar resizeMode="cover" source={{ uri: user?.avatarURL }} />
-            <UserContainer>
-                <Username>{user?.userName}</Username>
-                <Cafename>{name}</Cafename>
-            </UserContainer>
-        
+        <UserContainer>
+          <Username>{user?.userName}</Username>
+          <Cafename>{name}</Cafename>
+        </UserContainer>
       </Header>
       <File
         resizeMode="cover"
@@ -74,15 +73,15 @@ function SeeCoffeeShop({ id, name, photos, categories, user }: { id:number, name
         }}
         source={{ uri: photos[0]?.url }}
       />
-        <ExtraContainer>
-       <Caption>
+      <ExtraContainer>
+        <Caption>
             <Username>Catetories:</Username>
             {categories.map((item:any, index:number) => (
             <CategoryView key={index}>
                 <CaptionText>{item.name}</CaptionText>
             </CategoryView>
         ))}
-      </Caption>
+        </Caption>
       </ExtraContainer>
     </Container>
   );

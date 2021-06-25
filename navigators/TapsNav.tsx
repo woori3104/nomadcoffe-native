@@ -3,8 +3,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Image, View } from "react-native";
 import SharedStackNav from "./SharedStackNav";
-import useUser from "../../hooks/useUser";
 import TabIcon from "./TabIcon";
+import useUser from "../hooks/useUser";
 const Tabs = createBottomTabNavigator();
 
 export default function TabsNav() {
@@ -31,15 +31,22 @@ export default function TabsNav() {
         {() => <SharedStackNav screenName="Home" />}
       </Tabs.Screen>
       <Tabs.Screen
-        name="Search"
+        name="SearchCoffeeShop"
+        component={View}
+        listeners={({ navigation }) => {
+          return {
+            tabPress: (e) => {
+              e.preventDefault();
+              navigation.navigate("Search");
+            },
+          };
+        }}
         options={{
           tabBarIcon: ({ focused, color, size }) => (
             <TabIcon iconName={"search"} color={color} focused={focused} />
           ),
         }}
-      >
-        {() => <SharedStackNav screenName="Search" />}
-      </Tabs.Screen>
+      />
       <Tabs.Screen
         name="Me"
         options={{
