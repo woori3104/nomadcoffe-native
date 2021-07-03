@@ -48,6 +48,23 @@ export default function TabsNav() {
         }}
       />
       <Tabs.Screen
+        name="Camera"
+        component={View}
+        listeners={({ navigation }) => {
+          return {
+            tabPress: e => {
+              e.preventDefault();
+              navigation.navigate("Upload");
+            },
+          };
+        }}
+        options={{
+          tabBarIcon: ({ focused, color, size }) => (
+            <TabIcon iconName={"camera"} color={color} focused={focused} />
+          ),
+        }}
+      />
+      <Tabs.Screen
         name="Me"
         options={{
           tabBarIcon: ({ focused, color, size }) =>

@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { gql, useQuery } from "@apollo/client";
 import { FlatList } from "react-native";
 import ScreenLayout from "../components/ScreenLayout";
-import SeeCoffeeShop from "../components/SeeCoffeeShop";
+import CoffeeShop from "../components/CoffeeShop";
 
 const SEECOFFEESHOPS_QUERY = gql`
   query seeCoffeeShops($offset:Int) {
@@ -46,7 +46,7 @@ export default function Home({ navigation }: Props<"Home">) {
 
   const renderSeeCoffeeShop = ({ item:coffeeShop }: { item: any }) => {
     console.log(coffeeShop);
-    return <SeeCoffeeShop {...coffeeShop} />;
+    return <CoffeeShop {...coffeeShop} />;
   };
    return (
     <ScreenLayout loading={loading}>
@@ -64,7 +64,7 @@ export default function Home({ navigation }: Props<"Home">) {
         style={{ width: "100%" }}
         showsVerticalScrollIndicator={false}
         data={data?.seeCoffeeShops}
-        keyExtractor={(photo) => "" + photo.id}
+        keyExtractor={(photo) => "" + photo?.id}
         renderItem={renderSeeCoffeeShop}
       />
     </ScreenLayout>

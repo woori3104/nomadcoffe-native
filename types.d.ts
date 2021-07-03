@@ -10,8 +10,8 @@ export type RootStackParamList = {
   Profile: { userName: string; } | undefined
   ME: undefined
   EditProfile: undefined
-  SeeCoffeeShop: {id:number} | undefined
-
+  SeeCoffeeShop: { id: number } | undefined
+  UploadForm : undefined
 };
 
 export type Props<RouteName extends keyof RootStackParamList> = {

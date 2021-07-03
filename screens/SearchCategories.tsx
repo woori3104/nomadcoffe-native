@@ -9,36 +9,32 @@ import {
 } from "react-native";
 import styled from "styled-components/native";
 import DismissKeyboard from "../components/DismissKeyboard";
-import SeeCoffeeShop from "../components/SeeCoffeeShop";
+import CoffeeShop from "../components/CoffeeShop";
 
 const SEARCH_CATEGORIES = gql`
-  query searchCategories($keyword: String!, $offset: Int) {
-    searchCategories(keyword: $keyword, offset: $offset) {
+  query searchCategories($keyword: String!) {
+    searchCategories(keyword: $keyword) {
       id
       name
-      slub
-      shops {
+      latitude
+      longitude
+      photos {
+        id
+        url
+      }
+      user {
+        id
+        userName
+        avatarURL
+      }
+      categories {
         id
         name
-        latitude
-        longitude
-        photos {
-          id
-          url
-        }
-        user {
-          id
-          userName
-          avatarURL
-        }
-        categories {
-          id
-          name
-        }
       }
     }
   }
 `;
+
 const MessageContainer = styled.View`
   justify-content: center;
   align-items: center;
@@ -67,7 +63,6 @@ export default function searchCategories({ navigation }: {navigation:any}) {
     startQueryFn({
       variables: {
         keyword,
-        offset:0,
       },
     });
     console.log(data);
@@ -97,7 +92,7 @@ export default function searchCategories({ navigation }: {navigation:any}) {
   const { width, height } = useWindowDimensions();
   const renderSeeCategories = ({ item:searchCategories }: { item: any }) => {
     console.log(searchCategories?.shops);
-    return <SeeCoffeeShop {...searchCategories?.shops} />;
+    return <CoffeeShop {...searchCategories?.shops} />;
   };
   return (
     <DismissKeyboard>

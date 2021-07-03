@@ -1,65 +1,98 @@
-import { ApolloClient, from, InMemoryCache, makeVar } from "@apollo/client";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import {
+  ApolloClient,
+  createHttpLink,
+  InMemoryCache,
+  makeVar,
+  split,
+} from "@apollo/client";
 import { onError } from "@apollo/client/link/error";
-import { createUploadLink } from "apollo-upload-client";
 import { setContext } from "@apollo/client/link/context";
-import { offsetLimitPagination } from "@apollo/client/utilities";
+import {
+  getMainDefinition,
+  offsetLimitPagination,
+} from "@apollo/client/utilities";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { createUploadLink } from "apollo-upload-client";
+import { WebSocketLink } from "@apollo/client/link/ws";
 
 export const isLoggedInVar = makeVar(false);
 export const tokenVar = makeVar("");
+
 const TOKEN = "token";
 
 export const logUserIn = async (token:string) => {
-  await AsyncStorage.multiSet([
-    ["token", token],
-    ["loggedIn", "yes"],
-  ]);
+  await AsyncStorage.setItem(TOKEN, token);
   isLoggedInVar(true);
   tokenVar(token);
 };
-export const logUserOut = () => {
-  localStorage.removeItem(TOKEN);
-  window.location.reload();
+
+export const logUserOut = async () => {
+  await AsyncStorage.removeItem(TOKEN);
+  isLoggedInVar(false);
+  tokenVar("");
 };
 
-const httpLinkOptions = {
-  fetch,
-  uri://"http://localhost:4000/graphql",
-     "http://woori-nomadcoffe-backend.herokuapp.com/graphql",
-}
-const errorLink = onError(({ graphQLErrors, networkError }) => {
-  if (graphQLErrors)
-    graphQLErrors.forEach(({ message, locations, path }) =>
-      console.log(
-        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
-      )
-    );
-  if (networkError) console.log(`[Network error]: ${networkError}`);
+const uploadHttpLink = createUploadLink({
+  uri: "http://woori-nomadcoffe-backend.herokuapp.com/graphql",
 });
 
-const uploadHttpLink = createUploadLink(httpLinkOptions);
+const wsLink = new WebSocketLink({
+  uri: "ws://woori-nomadcoffe-backend.herokuapp.com/graphql",
+  options: {
+    connectionParams: () => ({
+      token: tokenVar(),
+    }),
+  },
+});
+
 const authLink = setContext((_, { headers }) => {
   return {
     headers: {
       ...headers,
-      token: localStorage.getItem(TOKEN),
+      token: tokenVar(),
     },
   };
 });
+
+const onErrorLink = onError(({ graphQLErrors, networkError }) => {
+  if (graphQLErrors) {
+    console.log(`GraphQL Error`, graphQLErrors);
+  }
+  if (networkError) {
+    console.log("Network Error", networkError);
+  }
+});
+
 export const cache = new InMemoryCache({
   typePolicies: {
     Query: {
       fields: {
-        seeFeed: offsetLimitPagination(),
+        seeCoffeeShops: offsetLimitPagination(),
       },
     },
   },
 });
+
+const httpLinks = authLink.concat(onErrorLink).concat(uploadHttpLink);
+
+const splitLink = split(
+  ({ query }) => {
+    const definition = getMainDefinition(query);
+    return (
+      definition.kind === "OperationDefinition" &&
+      definition.operation === "subscription"
+    );
+  },
+  wsLink,
+  httpLinks
+);
+
 const client = new ApolloClient({
-  link: from([errorLink, authLink.concat(uploadHttpLink)]),
-  cache: cache,
+  link: splitLink,
+  cache,
 });
-
-
 export default client;
+
+
+
 

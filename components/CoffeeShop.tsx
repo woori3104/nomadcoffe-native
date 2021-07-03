@@ -1,17 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
+import React from "react";
+import { useNavigation } from "@react-navigation/native";
 import styled from "styled-components/native";
 import { useWindowDimensions } from "react-native";
-import { gql } from "@apollo/client";
-
-const TOGGLE_LIKE_MUTATION = gql`
-  mutation toggleLike($id: Int!) {
-    toggleLike(id: $id) {
-      ok
-      error
-    }
-  }
-`;
 
 const Container = styled.View``;
 const Header = styled.TouchableOpacity`
@@ -39,23 +29,24 @@ const File = styled.Image``;
 const ExtraContainer = styled.View`
   padding: 10px;
 `;
+
 const Caption = styled.View``;
+
 const CaptionText = styled.Text`
   color: white;
 `;
-function SeeCoffeeShop({ id, name, photos, categories, user }: { id:number, name:string, photos:any, categories:any, user:any}) {
-    console.log(user);
+
+function CoffeeShop({ id, name, photos, categories, user }: { id:number, name:string, photos:any, categories:any, user:any}) {
+  console.log(user);
   const navigation = useNavigation();
   const { width, height } = useWindowDimensions();
 
   const goToProfile = () => {
     navigation.navigate("Profile", {
-        username: user.userName,
-        id: user.id,
+      username: user.userName,
+      id: user.id,
     });
   }
-
-      
   return (
     <Container>
       <Header onPress={goToProfile}>
@@ -71,15 +62,15 @@ function SeeCoffeeShop({ id, name, photos, categories, user }: { id:number, name
           width,
           height: height - 550,
         }}
-        source={{ uri: photos[0]?.url }}
+        source={{ uri: photos ? photos[0]?.url:"https://wr-nomadcoffee-uplods.s3.ap-northeast-2.amazonaws.com/shops/8-1623681546048-image__014.jpeg" }}
       />
       <ExtraContainer>
         <Caption>
-            <Username>Catetories:</Username>
-            {categories.map((item:any, index:number) => (
-            <CategoryView key={index}>
-                <CaptionText>{item.name}</CaptionText>
-            </CategoryView>
+          <Username>Catetories:</Username>
+          {categories?.map((item:any, index:number) => (
+          <CategoryView key={index}>
+            <CaptionText>{item.name}</CaptionText>
+          </CategoryView>
         ))}
         </Caption>
       </ExtraContainer>
@@ -87,4 +78,4 @@ function SeeCoffeeShop({ id, name, photos, categories, user }: { id:number, name
   );
 }
 
-export default SeeCoffeeShop;
+export default CoffeeShop;

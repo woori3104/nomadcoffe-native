@@ -4,7 +4,6 @@ import { RefreshControl, View } from "react-native";
 import { Props } from "../types";
 import ScreenLayout from "../components/ScreenLayout";
 import { ScrollView } from "react-native-gesture-handler";
-import SeeCoffeeShop from "../components/SeeCoffeeShop";
 
 const SEECOFFEESHOP_QUERY = gql`
   query seeCoffeeShop($id:Int) {
@@ -30,7 +29,7 @@ const SEECOFFEESHOP_QUERY = gql`
   }
 `;
 
-export default function seeCoffeeShop({ route }: Props<"SeeCoffeeShop">) {
+export default function SeeCoffeeShop({ route }: Props<"SeeCoffeeShop">) {
   const { data, loading, refetch } = useQuery(SEECOFFEESHOP_QUERY, {
     variables: {
       id: route?.params?.id,

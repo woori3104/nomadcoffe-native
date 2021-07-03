@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import styled from "styled-components/native";
 import DismissKeyboard from "../components/DismissKeyboard";
-import SeeCoffeeShop from "../components/SeeCoffeeShop";
+import CoffeeShop from "../components/CoffeeShop";
 
 const SEARCH_COFFESHOP = gql`
   query searchCoffeeShop($keyword: String!, $offset: Int) {
@@ -62,7 +62,6 @@ export default function SearchCoffeeShop({ navigation }: {navigation:any}) {
     startQueryFn({
       variables: {
         keyword,
-        offset:0,
       },
     });
     console.log(data);
@@ -92,7 +91,7 @@ export default function SearchCoffeeShop({ navigation }: {navigation:any}) {
   const { width, height } = useWindowDimensions();
   const renderSeeCoffeeShop = ({ item:coffeeShop }: { item: any }) => {
     console.log(coffeeShop);
-    return <SeeCoffeeShop {...coffeeShop} />;
+    return <CoffeeShop {...coffeeShop} />;
   };
   return (
     <DismissKeyboard>
